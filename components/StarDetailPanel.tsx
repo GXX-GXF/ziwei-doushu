@@ -164,14 +164,14 @@ const STAR_DETAIL: Record<string, {
 
 const levelConfig = {
   major: { label: '主星', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
-  lucky: { label: '吉星', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10' },
+  lucky: { label: '吉星', color: 'text-[#b7a6ff] border-[#9d6bff]/30 bg-[#9d6bff]/10' },
   sha:   { label: '煞星', color: 'text-red-400 border-red-500/30 bg-red-500/10' },
-  minor: { label: '杂星', color: 'text-slate-400 border-slate-500/25 bg-slate-500/10' },
+  minor: { label: '杂星', color: 'text-[#b6abcf] border-[#9d6bff]/25 bg-[#9d6bff]/10' },
 };
 
 const siHuaColors: Record<string, string> = {
   '禄': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  '权': 'text-blue-400 bg-blue-500/10 border-blue-500/30',
+  '权': 'text-[#e9c979] bg-[#e9c979]/10 border-[#e9c979]/30',
   '科': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
   '忌': 'text-red-400 bg-red-500/10 border-red-500/30',
 };
@@ -237,7 +237,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                 <div className="flex flex-wrap gap-1.5">
                   {desc.keywords.split('·').map(k => (
                     <span key={k} className="text-[11px] px-2 py-0.5 rounded-full"
-                      style={{ color: 'var(--t-gold)', border: '1px solid rgba(212,168,67,0.2)', background: 'rgba(212,168,67,0.06)' }}>
+                      style={{ color: 'var(--t-gold)', border: '1px solid color-mix(in srgb, var(--ac) 20%, transparent)', background: 'color-mix(in srgb, var(--ac) 6%, transparent)' }}>
                       {k.trim()}
                     </span>
                   ))}
@@ -247,7 +247,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
             {/* 古书原文 */}
             {detail && (
-              <div className="rounded-xl p-3" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.12)' }}>
+              <div className="rounded-xl p-3" style={{ background: 'color-mix(in srgb, var(--ac) 4%, transparent)', border: '1px solid color-mix(in srgb, var(--ac) 12%, transparent)' }}>
                 <div className="text-[10px] tracking-widest mb-1.5 flex items-center gap-1" style={{ color: 'var(--t-gold)', opacity: 0.7 }}>
                   古书原文
                 </div>

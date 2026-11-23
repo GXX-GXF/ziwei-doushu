@@ -66,6 +66,7 @@ export default function HemingPage() {
   const [analysisError, setAnalysisError] = useState(false);
   // 开源版不含 /api/heming：接口 404 时单独说明，而不是让用户反复重试
   const [apiMissing, setApiMissing] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const analysisRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +94,7 @@ export default function HemingPage() {
     setAnalyzing(true);
     setAnalysis('');
     setAnalysisError(false);
+    setRateLimited(false);
 
     try {
       // 每次按当前表单起盘，避免编辑出生信息后复用旧盘。
@@ -114,6 +116,7 @@ export default function HemingPage() {
         body: JSON.stringify({ chartA: cA, chartB: cB, question: q ?? undefined }),
       });
       if (res.status === 404) { setApiMissing(true); throw new Error('api-missing'); }
+      if (res.status === 429) { setRateLimited(true); throw new Error('rate-limited'); }
       if (!res.ok || !res.body) throw new Error();
 
       const reader = res.body.getReader();
@@ -149,8 +152,8 @@ export default function HemingPage() {
   }, [formA, formB, generateChart]);
 
   const cardStyle = {
-    background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.9)',
-    border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(200,160,60,0.2)'}`,
+    background: 'var(--t-card)',
+    border: '1px solid var(--t-border)',
     borderRadius: '16px',
     padding: '24px',
   };
@@ -165,22 +168,21 @@ export default function HemingPage() {
       {/* 顶栏 */}
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
-        background: isDark ? 'rgba(2,8,16,0.88)' : 'rgba(250,245,235,0.92)',
-        backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--bdr)',
+        background: 'var(--bg-0)',
+        borderBottom: '1px solid var(--t-border)',
         display: 'flex', alignItems: 'center', padding: '0 24px', height: '52px', gap: '16px',
       }}>
         <button
           onClick={() => router.push('/')}
           style={{
-            display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px',
-            color: 'var(--tx-3)', background: 'none', border: 'none', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px',
+            border: '1px solid var(--t-border-acc)', borderRadius: 12, background: 'var(--t-card)',
+            color: 'var(--t-gold)', fontSize: '14px', cursor: 'pointer',
           }}
         >
-          <span style={{ fontSize: '16px' }}>‹</span>
-          <span>返回</span>
+          ← 返回首页
         </button>
-        <div style={{ width: '1px', height: '20px', background: 'var(--bdr-med)' }} />
+        <div style={{ width: '1px', height: '20px', background: 'var(--t-border)' }} />
         <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em' }}>合盘分析</span>
         <div style={{ flex: 1 }} />
         <span style={{ fontSize: '11px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
@@ -248,12 +250,11 @@ export default function HemingPage() {
               </div>
               <button
                 onClick={() => runAnalysis()}
+                className="btn-accent"
                 style={{
-                  padding: '14px 40px', borderRadius: 'var(--r-pill)', border: 'none',
-                  background: 'linear-gradient(135deg, #9a6210, #c88020)',
-                  color: '#fff8e8', fontSize: '14px', fontWeight: 600,
+                  padding: '14px 40px', borderRadius: 'var(--r-pill)',
+                  fontSize: '14px', fontWeight: 600,
                   letterSpacing: '0.15em', cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(140,100,20,0.25)',
                   transition: 'transform 0.15s',
                 }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
@@ -262,7 +263,7 @@ export default function HemingPage() {
                 开始合盘分析
               </button>
               {formError && (
-                <div style={{ marginTop: '20px', fontSize: '13px', color: '#dc2626' }}>
+                <div style={{ marginTop: '20px', fontSize: '13px', color: 'var(--ji)' }}>
                   {formError}
                 </div>
               )}
@@ -273,7 +274,7 @@ export default function HemingPage() {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '40px 0', color: 'var(--tx-3)', fontSize: '13px' }}>
               <div style={{
                 width: '14px', height: '14px',
-                border: '2px solid var(--bdr-med)', borderTopColor: 'var(--ac)',
+                border: '2px solid var(--t-border)', borderTopColor: 'var(--ac)',
                 borderRadius: '50%', animation: 'spin 0.8s linear infinite',
               }} />
               正在对比双方命盘…
@@ -283,10 +284,10 @@ export default function HemingPage() {
           {analysis && <AiContent text={analysis} streaming={analyzing} />}
 
           {analysisError && (
-            <div style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--bdr)', background: 'var(--bg-card)', fontSize: '13px', color: 'var(--tx-2)', marginTop: '12px' }}>
+            <div style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--t-border)', background: 'var(--t-card)', fontSize: '13px', color: 'var(--tx-2)', marginTop: '12px' }}>
               {apiMissing
                 ? '开源版不含合盘 AI 分析接口（/api/heming），需要你自己实现后才能用。两人的命盘可以分别到「排盘」页（/chart）查看。'
-                : '分析暂时不可用，请重试。'}
+                : rateLimited ? '今日解读次数已用完，明天再来' : '分析暂时不可用，请重试。'}
             </div>
           )}
         </div>
@@ -294,7 +295,7 @@ export default function HemingPage() {
         {/* ═══ 针对合盘的追问聊天框（仅分析完成后显示）═══════════ */}
         {analysis && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '11px', letterSpacing: '0.2em', textIndent: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
               针对此次合盘继续追问
             </div>
 
@@ -314,14 +315,14 @@ export default function HemingPage() {
                   style={{
                     fontSize: '12px', padding: '6px 14px',
                     borderRadius: 'var(--r-pill)',
-                    border: '1px solid var(--bdr-med)',
+                    border: '1px solid var(--t-border)',
                     background: 'transparent', color: 'var(--tx-2)',
                     cursor: analyzing ? 'not-allowed' : 'pointer',
                     opacity: analyzing ? 0.5 : 1,
                     transition: 'border-color 0.15s',
                   }}
                   onMouseEnter={e => { if (!analyzing) (e.currentTarget as HTMLElement).style.borderColor = 'var(--ac-bdr)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--bdr-med)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--t-border)'; }}
                 >
                   {q}
                 </button>
@@ -343,10 +344,12 @@ export default function HemingPage() {
               <button
                 onClick={() => runAnalysis(question || undefined)}
                 disabled={analyzing}
+                className={analyzing ? undefined : 'btn-accent'}
                 style={{
-                  padding: '10px 20px', borderRadius: 'var(--r-sm)', border: 'none',
-                  background: analyzing ? 'var(--bg-2)' : 'var(--tx-0)',
-                  color: analyzing ? 'var(--tx-3)' : 'white',
+                  padding: '10px 20px', borderRadius: 'var(--r-sm)',
+                  border: analyzing ? '1px solid var(--t-border)' : 'none',
+                  background: analyzing ? 'var(--t-card)' : undefined,
+                  color: analyzing ? 'var(--t-faint)' : undefined,
                   fontSize: '13px', fontWeight: 500,
                   cursor: analyzing ? 'not-allowed' : 'pointer',
                   transition: 'all 0.15s', whiteSpace: 'nowrap',

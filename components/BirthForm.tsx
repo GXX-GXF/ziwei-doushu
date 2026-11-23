@@ -5,7 +5,7 @@ import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES } from '@/lib/ziwei/cities';
-import { formToBirthInfo, calcTrueSolarBranch } from '@/lib/ziwei/share';
+import { formToBirthInfo, formToTrueSolarTime } from '@/lib/ziwei/share';
 
 export interface BirthFormState {
   name: string;
@@ -71,16 +71,9 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
     return prov ? prov.cities : [];
   }, [form.province]);
 
-  const branch = useMemo(() => {
-    if (form.unknownTime) return 0;
-    return calcTrueSolarBranch(
-      parseInt(form.clockHour) || 0,
-      parseInt(form.clockMinute) || 0,
-      form.longitude,
-    );
-  }, [form.clockHour, form.clockMinute, form.longitude, form.unknownTime]);
-
-  const offsetMin = Math.round((form.longitude - 120) * 4);
+  const solarTime = formToTrueSolarTime(form);
+  const branch = form.unknownTime ? 0 : solarTime.branch;
+  const offsetMin = Math.round(solarTime.totalCorrectionMinutes);
   const shichenInfo = SHICHEN[branch];
 
   // ─── 校验逻辑 ───────────────────────────────────────────
@@ -143,22 +136,20 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
   };
 
   // ─── 样式变量 ────────────────────────────────────────────
-  const bg = isDark ? 'rgba(8,16,40,0.85)' : 'rgba(255,255,255,0.92)';
-  const border = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(200,160,60,0.2)';
-  // 暗色模式标签提亮：从 rgba(74,112,144,1) → rgba(180,200,225,0.9)
-  const labelClr = isDark ? 'rgba(180,200,225,0.9)' : 'rgba(120,80,10,0.55)';
-  const inputBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,252,240,0.8)';
-  const inputBorder = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(200,160,60,0.25)';
-  // 输入文字提亮：从 #c8d8f0 → #e8eef8
-  const inputClr = isDark ? '#e8eef8' : '#2a1a00';
-  const focusBorder = isDark ? 'rgba(212,168,67,0.5)' : 'rgba(180,120,20,0.5)';
+  const bg = 'var(--t-card)';
+  const border = 'var(--t-border)';
+  const labelClr = 'var(--ac)';
+  const inputBg = 'var(--bg-0)';
+  const inputBorder = 'var(--t-border)';
+  const inputClr = 'var(--tx-1)';
+  const focusBorder = 'var(--ac)';
   const errorClr = isDark ? '#f87171' : '#dc2626';
-  const panelBg = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,250,235,0.7)';
-  const panelBorder = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(200,160,60,0.2)';
-  const goldText = isDark ? '#d4a843' : '#7a5008';
-  const summaryBg = isDark ? 'rgba(37,99,235,0.12)' : 'rgba(37,99,235,0.07)';
-  const summaryBorder = isDark ? 'rgba(37,99,235,0.35)' : 'rgba(37,99,235,0.25)';
-  const summaryClr = isDark ? 'rgba(147,197,253,0.9)' : 'rgba(37,99,235,0.85)';
+  const panelBg = 'var(--ac-bg)';
+  const panelBorder = 'var(--t-border)';
+  const goldText = 'var(--ac)';
+  const summaryBg = 'var(--ac-bg)';
+  const summaryBorder = 'var(--t-border)';
+  const summaryClr = isDark ? 'color-mix(in srgb, var(--ac) 95%, transparent)' : 'rgba(37,99,235,0.85)';
 
   const inputStyle = {
     background: inputBg,
@@ -200,19 +191,24 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'blur(20px)' }}
+      className="zj-form"
+      style={{ background: bg, border: `1px solid ${border}`, borderRadius: '16px', padding: '28px', boxShadow: '0 8px 40px rgba(0,0,0,0.5), 0 0 32px -8px color-mix(in srgb, var(--ac) 45%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ac) 15%, transparent)' }}
     >
       {/* 标题 */}
-      <h3 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.4em', textAlign: 'center', marginBottom: '20px', fontWeight: 500 }}>
-        ── 输入生辰八字 ──
-      </h3>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+        <div className="zj-divider-gold" style={{ flex: 1 }} />
+        <h3 className="zj-gold-title" style={{ fontSize: '12px', letterSpacing: '0.4em', fontWeight: 500, margin: 0, whiteSpace: 'nowrap' }}>
+          输入生辰八字
+        </h3>
+        <div className="zj-divider-gold" style={{ flex: 1 }} />
+      </div>
 
       {/* ── 进度条 ── */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
         {steps.map((done, i) => (
           <motion.div
             key={i}
-            animate={{ background: done ? (isDark ? '#d4a843' : '#b07820') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(200,160,60,0.15)') }}
+            animate={{ background: done ? (isDark ? 'var(--ac)' : '#b07820') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(200,160,60,0.15)') }}
             transition={{ duration: 0.3 }}
             style={{ flex: 1, height: '2px', borderRadius: '2px' }}
           />
@@ -319,9 +315,9 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{ fontSize: '10px', color: isDark ? 'rgba(180,210,235,0.85)' : 'rgba(100,70,10,0.5)', marginTop: '5px' }}
+              style={{ fontSize: '10px', color: isDark ? 'rgba(182,171,207,0.9)' : 'rgba(100,70,10,0.5)', marginTop: '5px' }}
             >
-              {form.city || '（请选择城市）'} · 经度 {form.longitude.toFixed(1)}°E · 时差 {offsetMin > 0 ? '+' : ''}{offsetMin} 分钟
+              {form.city || '（请选择城市）'} · 经度 {form.longitude.toFixed(1)}°E · 总时差 {offsetMin > 0 ? '+' : ''}{offsetMin} 分钟{solarTime.dateValid ? '（含均时差）' : ''}
             </motion.p>
           ) : (
             <motion.p
@@ -329,7 +325,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              style={{ fontSize: '10px', color: isDark ? 'rgba(165,185,210,0.7)' : 'rgba(140,100,20,0.45)', marginTop: '5px' }}
+              style={{ fontSize: '10px', color: isDark ? 'rgba(182,171,207,0.75)' : 'rgba(140,100,20,0.45)', marginTop: '5px' }}
             >
               * 倪海厦批命用真太阳时，建议填写出生地以自动校正时辰
             </motion.p>
@@ -363,12 +359,12 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
           </div>
           {/* 真太阳时结果 */}
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
-            <span style={{ fontSize: '10px', color: isDark ? 'rgba(170,195,220,0.75)' : 'rgba(140,100,20,0.5)' }}>真太阳时 → </span>
+            <span style={{ fontSize: '10px', color: isDark ? 'rgba(182,171,207,0.8)' : 'rgba(140,100,20,0.5)' }}>真太阳时 → </span>
             <span style={{ fontSize: '15px', color: goldText, fontWeight: 600, letterSpacing: '0.08em' }}>
               {SHICHEN_NAMES[branch]}时
             </span>
             {shichenInfo && (
-              <span style={{ fontSize: '10px', color: isDark ? 'rgba(170,195,220,0.75)' : 'rgba(140,100,20,0.5)', marginLeft: '4px' }}>
+              <span style={{ fontSize: '10px', color: isDark ? 'rgba(182,171,207,0.8)' : 'rgba(140,100,20,0.5)', marginLeft: '4px' }}>
                 （{shichenInfo.range}）
               </span>
             )}
@@ -381,7 +377,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
             onChange={e => setForm({ ...form, unknownTime: e.target.checked })}
             style={{ width: '14px', height: '14px', borderRadius: '4px', cursor: 'pointer' }}
           />
-          <span style={{ fontSize: '10px', color: isDark ? 'rgba(165,185,210,0.7)' : 'rgba(140,100,20,0.45)' }}>
+          <span style={{ fontSize: '10px', color: isDark ? 'rgba(182,171,207,0.75)' : 'rgba(140,100,20,0.45)' }}>
             不知道出生时间，以子时（23:00–01:00）起盘
           </span>
         </label>
@@ -394,7 +390,6 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
           {(['male', 'female'] as const).map(g => {
             const active = form.gender === g;
             const isMale = g === 'male';
-            const accent = isMale ? '37,99,235' : '225,29,72';
             return (
               <motion.button
                 key={g}
@@ -407,9 +402,10 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
                   borderRadius: '14px',
                   fontSize: '13px',
                   fontWeight: 500,
-                  border: `1px solid ${active ? `rgba(${accent},0.6)` : inputBorder}`,
-                  background: active ? `rgba(${accent},0.08)` : inputBg,
-                  color: active ? `rgba(${accent},0.9)` : (isDark ? 'rgba(190,205,225,0.7)' : 'rgba(100,80,40,0.4)'),
+                  border: `1px solid ${active ? 'color-mix(in srgb, var(--ac) 75%, transparent)' : inputBorder}`,
+                  background: active ? 'linear-gradient(135deg,#c9971a,#f6d47c 55%,var(--ac))' : inputBg,
+                  color: active ? '#1a0f00' : (isDark ? 'color-mix(in srgb, var(--ac) 75%, transparent)' : 'rgba(100,80,40,0.4)'),
+                  boxShadow: active ? '0 4px 16px color-mix(in srgb, var(--ac) 30%, transparent)' : 'none',
                   transition: 'all 0.2s',
                   cursor: 'pointer',
                 }}
@@ -464,12 +460,12 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
           border: 'none',
           cursor: loading ? 'not-allowed' : 'pointer',
           background: loading
-            ? (isDark ? 'rgba(212,168,67,0.15)' : 'rgba(180,120,20,0.15)')
+            ? (isDark ? 'color-mix(in srgb, var(--ac) 10%, transparent)' : 'rgba(180,120,20,0.15)')
             : (isDark
-              ? 'linear-gradient(135deg, rgba(180,130,40,0.9), rgba(240,200,80,0.9))'
+              ? 'linear-gradient(135deg,#b8860b,#f6d47c 55%,var(--ac))'
               : 'linear-gradient(135deg, #9a6210, #c88020)'),
-          color: loading ? (isDark ? 'rgba(212,168,67,0.4)' : 'rgba(120,80,10,0.4)') : (isDark ? '#08080a' : '#fff8e8'),
-          boxShadow: loading ? 'none' : (isDark ? '0 4px 20px rgba(212,168,67,0.2)' : '0 4px 16px rgba(140,100,20,0.25)'),
+          color: loading ? (isDark ? 'color-mix(in srgb, var(--ac) 45%, transparent)' : 'rgba(120,80,10,0.4)') : (isDark ? '#1a0f00' : '#fff8e8'),
+          boxShadow: loading ? 'none' : (isDark ? '0 6px 24px color-mix(in srgb, var(--ac) 40%, transparent), 0 0 28px -6px color-mix(in srgb, var(--ac) 60%, transparent)' : '0 4px 16px rgba(140,100,20,0.25)'),
           transition: 'all 0.2s',
         }}
       >

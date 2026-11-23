@@ -47,7 +47,7 @@ export default function ScrollIntro({ onComplete, skipLabel = '跳 过' }: Scrol
           transition={{ duration: 0.7, ease: 'easeInOut' }}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'radial-gradient(ellipse at center, #1a120a 0%, #0a0604 70%, #000000 100%)',
+            background: 'radial-gradient(ellipse at center, #1a1038 0%, #06020f 70%, #000000 100%)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
           }}
@@ -56,12 +56,12 @@ export default function ScrollIntro({ onComplete, skipLabel = '跳 过' }: Scrol
           <div style={{
             position: 'absolute', inset: 0,
             backgroundImage: `
-              radial-gradient(2px 2px at 20% 30%, rgba(255,220,150,0.6), transparent),
-              radial-gradient(1px 1px at 70% 20%, rgba(255,220,150,0.4), transparent),
-              radial-gradient(1px 1px at 35% 75%, rgba(255,220,150,0.5), transparent),
-              radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,220,150,0.4), transparent),
-              radial-gradient(1px 1px at 60% 88%, rgba(255,220,150,0.3), transparent),
-              radial-gradient(2px 2px at 92% 40%, rgba(255,220,150,0.5), transparent)
+              radial-gradient(2px 2px at 20% 30%, color-mix(in srgb, var(--ac) 60%, transparent), transparent),
+              radial-gradient(1px 1px at 70% 20%, color-mix(in srgb, var(--ac) 40%, transparent), transparent),
+              radial-gradient(1px 1px at 35% 75%, color-mix(in srgb, var(--ac) 50%, transparent), transparent),
+              radial-gradient(1.5px 1.5px at 85% 65%, color-mix(in srgb, var(--ac) 40%, transparent), transparent),
+              radial-gradient(1px 1px at 60% 88%, color-mix(in srgb, var(--ac) 30%, transparent), transparent),
+              radial-gradient(2px 2px at 92% 40%, color-mix(in srgb, var(--ac) 50%, transparent), transparent)
             `,
           }} />
 

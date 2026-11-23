@@ -49,7 +49,7 @@ export default function AnnouncementModal() {
           // 不点击外部关闭——强制用户按"我知道了"按钮才能进入首页
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'rgba(20,12,2,0.88)',
+            background: 'rgba(6,2,15,0.88)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -63,14 +63,14 @@ export default function AnnouncementModal() {
             transition={{ duration: 0.35, ease: [0.25, 0.1, 0.25, 1] }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              background: 'linear-gradient(180deg, #fefcf6 0%, #faf3e3 100%)',
-              borderRadius: '20px',
+              background: 'var(--t-card)',
+              borderRadius: '16px',
               width: '100%',
               maxWidth: '640px',
               maxHeight: 'min(85vh, 760px)',
               overflow: 'hidden',
-              boxShadow: '0 24px 80px rgba(60,30,10,0.4), 0 4px 16px rgba(60,30,10,0.2)',
-              border: '1px solid rgba(184,146,42,0.25)',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.6), 0 0 40px -10px color-mix(in srgb, var(--ac) 40%, transparent)',
+              border: '1px solid var(--t-border)',
               display: 'flex',
               flexDirection: 'column',
               fontFamily: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
@@ -79,15 +79,15 @@ export default function AnnouncementModal() {
             {/* 顶部装饰 + 关闭按钮 */}
             <div style={{
               padding: '22px 28px 14px',
-              borderBottom: '1px solid rgba(184,146,42,0.15)',
-              background: 'linear-gradient(180deg, rgba(184,146,42,0.08) 0%, transparent 100%)',
+              borderBottom: '1px solid color-mix(in srgb, var(--ac) 25%, transparent)',
+              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ac) 8%, transparent) 0%, transparent 100%)',
               flexShrink: 0,
               position: 'relative',
             }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.4em', color: '#b8922a', opacity: 0.7, marginBottom: '6px' }}>
+              <div style={{ fontSize: '10px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7, marginBottom: '6px' }}>
                 A LETTER TO USERS
               </div>
-              <h2 style={{ fontSize: '19px', fontWeight: 700, color: '#3d2f10', letterSpacing: '0.08em', margin: 0 }}>
+              <h2 style={{ fontSize: '19px', fontWeight: 700, color: 'var(--ac)', letterSpacing: '0.08em', margin: 0 }}>
                 致正在使用这个平台的你
               </h2>
               <button
@@ -96,10 +96,10 @@ export default function AnnouncementModal() {
                 style={{
                   position: 'absolute', top: '14px', right: '16px',
                   width: '28px', height: '28px',
-                  background: 'rgba(184,146,42,0.08)',
-                  border: '1px solid rgba(184,146,42,0.2)',
+                  background: 'color-mix(in srgb, var(--ac) 10%, transparent)',
+                  border: '1px solid color-mix(in srgb, var(--ac) 30%, transparent)',
                   borderRadius: '50%',
-                  color: '#7a5e2a', fontSize: '14px',
+                  color: 'var(--ac)', fontSize: '14px',
                   cursor: 'pointer', lineHeight: 1,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
@@ -110,17 +110,17 @@ export default function AnnouncementModal() {
             <div style={{
               margin: '14px 22px 0',
               padding: '12px 16px',
-              background: 'linear-gradient(135deg, #fff5e3 0%, #ffe1c0 100%)',
-              border: '1.5px dashed rgba(232,132,62,0.5)',
+              background: 'linear-gradient(135deg, rgba(157,107,255,0.14) 0%, color-mix(in srgb, var(--ac) 10%, transparent) 100%)',
+              border: '1.5px dashed color-mix(in srgb, var(--ac) 50%, transparent)',
               borderRadius: '12px',
               flexShrink: 0,
               textAlign: 'center',
             }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.3em', color: '#c45a2d', marginBottom: '4px', fontWeight: 600 }}>
+              <div style={{ fontSize: '10px', letterSpacing: '0.3em', color: 'var(--ac)', marginBottom: '4px', fontWeight: 600 }}>
                 LIMITED TIME · 限时回馈
               </div>
-              <div style={{ fontSize: '14px', color: '#8b3a1a', fontWeight: 600, lineHeight: 1.6 }}>
-                <span style={{ fontSize: '16px', color: '#c45a2d', fontWeight: 700 }}>5 月 1 日 — 5 月 8 日</span>
+              <div style={{ fontSize: '14px', color: '#efe9dc', fontWeight: 600, lineHeight: 1.6 }}>
+                <span style={{ fontSize: '16px', color: 'var(--ac)', fontWeight: 700 }}>5 月 1 日 — 5 月 8 日</span>
                 <br />
                 平台全部功能 + AI 提问 全部免费开放
               </div>
@@ -132,7 +132,7 @@ export default function AnnouncementModal() {
               overflowY: 'auto',
               fontSize: '14px',
               lineHeight: 1.85,
-              color: '#5a4a30',
+              color: '#efe9dc',
               flex: 1,
             }}>
               <p style={{ margin: '0 0 12px' }}>
@@ -147,11 +147,11 @@ export default function AnnouncementModal() {
               <p style={{
                 margin: '0 0 12px',
                 padding: '10px 14px',
-                background: 'rgba(184,146,42,0.07)',
-                borderLeft: '3px solid rgba(184,146,42,0.45)',
+                background: 'color-mix(in srgb, var(--ac) 8%, transparent)',
+                borderLeft: '3px solid color-mix(in srgb, var(--ac) 50%, transparent)',
                 borderRadius: '0 8px 8px 0',
                 fontStyle: 'italic',
-                color: '#7a5e2a',
+                color: 'color-mix(in srgb, var(--ac) 85%, transparent)',
               }}>
                 倪师曾说过一句话：人怎么可能发明出完全没有用的东西呢？
               </p>
@@ -162,12 +162,12 @@ export default function AnnouncementModal() {
                 至于那些说&ldquo;你当下在看这些，其实也是命运的一部分&rdquo;之类的话，我就不多评价了。
               </p>
               <p style={{ margin: '0 0 12px' }}>
-                这几天账号被小红书抬走了，<strong style={{ color: '#c45a2d' }}>5 月 3 号开始恢复正常更新。</strong>
+                这几天账号被小红书抬走了，<strong style={{ color: 'var(--ac)' }}>5 月 3 号开始恢复正常更新。</strong>
               </p>
-              <p style={{ margin: '0 0 16px', color: '#3d2f10', fontWeight: 500 }}>
+              <p style={{ margin: '0 0 16px', color: 'var(--ac)', fontWeight: 500 }}>
                 最后，真心祝愿大家都能越来越了解自己，越来越爱自己，也越来越有能力爱身边的人。
               </p>
-              <p style={{ margin: 0, textAlign: 'right', fontSize: '13px', color: '#7a5e2a' }}>
+              <p style={{ margin: 0, textAlign: 'right', fontSize: '13px', color: 'color-mix(in srgb, var(--ac) 80%, transparent)' }}>
                 ——谢谢大家 🙏
               </p>
             </div>
@@ -175,8 +175,8 @@ export default function AnnouncementModal() {
             {/* 底部按钮 */}
             <div style={{
               padding: '14px 22px',
-              borderTop: '1px solid rgba(184,146,42,0.15)',
-              background: 'rgba(184,146,42,0.04)',
+              borderTop: '1px solid color-mix(in srgb, var(--ac) 25%, transparent)',
+              background: 'color-mix(in srgb, var(--ac) 6%, transparent)',
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '10px',
@@ -186,15 +186,15 @@ export default function AnnouncementModal() {
                 onClick={close}
                 style={{
                   padding: '10px 24px',
-                  background: 'linear-gradient(135deg, #b8922a 0%, #9a7a20 100%)',
-                  color: '#fff',
+                  background: 'linear-gradient(135deg, #b8860b 0%, #f6d47c 55%, var(--ac) 100%)',
+                  color: '#1a0f00',
                   border: 'none',
                   borderRadius: '10px',
                   fontSize: '13px',
                   letterSpacing: '0.1em',
                   fontWeight: 500,
                   cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
+                  boxShadow: '0 4px 12px color-mix(in srgb, var(--ac) 40%, transparent)',
                 }}
               >
                 我知道了

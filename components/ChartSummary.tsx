@@ -10,8 +10,8 @@ interface ChartSummaryProps {
 
 const PatternLevelStyle = {
   excellent: { dot: 'bg-amber-400', label: 'text-amber-500', badge: 'text-amber-500 bg-amber-500/10 border-amber-500/25' },
-  good: { dot: 'bg-sky-400', label: 'text-sky-500', badge: 'text-sky-500 bg-sky-500/10 border-sky-500/25' },
-  neutral: { dot: 'bg-slate-400', label: 'text-slate-400', badge: 'text-slate-400 bg-slate-500/10 border-slate-500/20' },
+  good: { dot: 'bg-[#9d6bff]', label: 'text-[#b7a6ff]', badge: 'text-[#b7a6ff] bg-[#9d6bff]/10 border-[#9d6bff]/25' },
+  neutral: { dot: 'bg-[#8a7fb0]', label: 'text-[#b6abcf]', badge: 'text-[#b6abcf] bg-[#9d6bff]/10 border-[#9d6bff]/20' },
   caution: { dot: 'bg-orange-500', label: 'text-orange-500', badge: 'text-orange-500 bg-orange-500/10 border-orange-500/25' },
 };
 
@@ -75,8 +75,8 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
                   <span key={k} className="text-[10px] px-2 py-0.5 rounded-full"
                     style={{
                       color: 'var(--t-gold)',
-                      background: 'rgba(212,168,67,0.08)',
-                      border: '1px solid rgba(212,168,67,0.15)',
+                      background: 'color-mix(in srgb, var(--ac) 8%, transparent)',
+                      border: '1px solid color-mix(in srgb, var(--ac) 15%, transparent)',
                     }}>
                     {k}
                   </span>
@@ -89,7 +89,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
             <div className="text-[9px] mb-1" style={{ color: 'var(--t-faint)', opacity: 0.85 }}>五行局 · 当前大限</div>
             <div className="text-[11px]" style={{ color: 'var(--t-text2)' }}>{chart.wuxingJuName}</div>
             {currentDx && (
-              <div className="text-[11px] text-purple-500 mt-0.5">
+              <div className="text-[11px] text-[#9d6bff] mt-0.5">
                 {currentDx.startAge}~{currentDx.endAge}岁 · {currentDx.palaceName}
               </div>
             )}
@@ -124,10 +124,10 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
           <div className="grid grid-cols-2 gap-2">
             {siHuaSummary.map(({ name, siHua, palaceName }) => {
               const colors: Record<string, { text: string; bg: string; border: string }> = {
-                '禄': { text: '#4ade80', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.2)' },
-                '权': { text: '#60a5fa', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.2)' },
-                '科': { text: '#facc15', bg: 'rgba(250,204,21,0.06)', border: 'rgba(250,204,21,0.2)' },
-                '忌': { text: '#f87171', bg: 'rgba(248,113,113,0.06)', border: 'rgba(248,113,113,0.2)' },
+                '禄': { text: '#43d68a', bg: 'rgba(67,214,138,0.06)', border: 'rgba(67,214,138,0.2)' },
+                '权': { text: 'var(--ac)', bg: 'color-mix(in srgb, var(--ac) 6%, transparent)', border: 'color-mix(in srgb, var(--ac) 25%, transparent)' },
+                '科': { text: '#7aa8ff', bg: 'rgba(122,168,255,0.06)', border: 'rgba(122,168,255,0.2)' },
+                '忌': { text: '#ff5d47', bg: 'rgba(255,93,71,0.06)', border: 'rgba(255,93,71,0.2)' },
               };
               const c = colors[siHua] || colors['禄'];
               return (

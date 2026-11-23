@@ -67,40 +67,41 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
             onClick={e => e.stopPropagation()}
             className="rounded-2xl overflow-hidden"
             style={{
-              background: 'white',
+              background: 'var(--t-card)',
+              border: '1px solid var(--t-border)',
               maxWidth: '680px',
               width: '100%',
               maxHeight: '92vh',
               overflowY: 'auto',
-              boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.6), 0 0 40px -10px color-mix(in srgb, var(--ac) 45%, transparent)',
             }}
           >
             {/* 顶部标题 */}
             <div style={{
               padding: '14px 18px',
-              borderBottom: '1px solid rgba(184,146,42,0.15)',
+              borderBottom: '1px solid color-mix(in srgb, var(--ac) 25%, transparent)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#3d2f10', letterSpacing: '0.12em' }}>
+              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ac)', letterSpacing: '0.12em' }}>
                 ✦ 分享命盘
               </div>
               <button onClick={onClose}
                 style={{
-                  width: '28px', height: '28px', borderRadius: '50%', border: 'none',
-                  background: 'rgba(0,0,0,0.05)', color: '#666', fontSize: '16px',
+                  width: '28px', height: '28px', borderRadius: '50%', border: '1px solid color-mix(in srgb, var(--ac) 30%, transparent)',
+                  background: 'color-mix(in srgb, var(--ac) 10%, transparent)', color: 'var(--ac)', fontSize: '16px',
                   cursor: 'pointer', lineHeight: 1,
                 }}
               >×</button>
             </div>
 
             {/* 卡片图预览（实际渲染） */}
-            <div style={{ padding: '20px', background: '#fbf6e8', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+            <div style={{ padding: '20px', background: '#06020f', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
               {chart && (
                 <ShareCardCanvas chart={chart} birth={birth} highlight={highlight} />
               )}
             </div>
 
-            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: '#a89b7c', letterSpacing: '0.05em' }}>
+            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-2)', letterSpacing: '0.05em' }}>
               ↑ 朋友圈 / 微信 / 抖音 / 小红书 都能用
             </div>
 
@@ -109,10 +110,10 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               <button onClick={downloadImage} disabled={downloading}
                 style={{
                   padding: '14px', borderRadius: '10px', border: 'none',
-                  background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
-                  color: 'white', fontSize: '14px', fontWeight: 600, letterSpacing: '0.15em',
+                  background: 'linear-gradient(135deg, #b8860b 0%, #f6d47c 55%, var(--ac) 100%)',
+                  color: '#1a0f00', fontSize: '14px', fontWeight: 600, letterSpacing: '0.15em',
                   cursor: downloading ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
+                  boxShadow: '0 4px 12px color-mix(in srgb, var(--ac) 40%, transparent)',
                   opacity: downloading ? 0.7 : 1,
                 }}
               >
@@ -122,8 +123,8 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               <button onClick={copyLink}
                 style={{
                   padding: '14px', borderRadius: '10px',
-                  border: '1px solid rgba(184,146,42,0.4)', background: 'white',
-                  color: '#b8922a', fontSize: '14px', fontWeight: 500, letterSpacing: '0.12em',
+                  border: '1px solid color-mix(in srgb, var(--ac) 45%, transparent)', background: 'rgba(20,12,44,0.6)',
+                  color: 'var(--ac)', fontSize: '14px', fontWeight: 500, letterSpacing: '0.12em',
                   cursor: 'pointer',
                 }}
               >
@@ -131,11 +132,11 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               </button>
 
               <div style={{
-                fontSize: '11px', color: '#a89b7c', lineHeight: 1.7,
-                padding: '10px 12px', background: 'rgba(184,146,42,0.05)',
+                fontSize: '11px', color: 'var(--tx-2)', lineHeight: 1.7,
+                padding: '10px 12px', background: 'rgba(157,107,255,0.08)',
                 borderRadius: '8px', marginTop: '4px',
               }}>
-                <div style={{ marginBottom: '4px', fontWeight: 600, color: '#8b6a14' }}>使用提示：</div>
+                <div style={{ marginBottom: '4px', fontWeight: 600, color: 'var(--ac)' }}>使用提示：</div>
                 · 下载图片可发朋友圈 / 抖音 / 小红书<br />
                 · 复制链接发给微信好友，对方点开看自己的盘起点
               </div>

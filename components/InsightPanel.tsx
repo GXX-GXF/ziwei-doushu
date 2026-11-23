@@ -20,6 +20,7 @@ interface InsightPanelProps {
   chart: ZiweiChart;
   selectedPalace?: Palace | null;
   selectedSiHua?: SelectedSiHua | null;
+  palaceNonce?: number;
 }
 
 const TOPICS = [
@@ -154,7 +155,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (sectionMatch) {
           return (
             <div key={i} className="pt-3 pb-0.5 first:pt-0">
-              <span className="text-[11px] font-semibold tracking-wide" style={{ color: 'var(--t-gold)' }}>
+              <span className="text-[13px] font-semibold tracking-wide" style={{ color: 'var(--t-gold)' }}>
                 【{sectionMatch[1]}】
               </span>
             </div>
@@ -163,7 +164,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (line.trim() === '') return <div key={i} className="h-1" />;
         const parts = line.split(/\*\*(.+?)\*\*/);
         return (
-          <div key={i} className="text-[11px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>
+          <div key={i} className="text-[13px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>
             {parts.map((part, j) =>
               j % 2 === 0
                 ? part
@@ -182,21 +183,26 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
   );
 }
 
-export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: InsightPanelProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+export default function InsightPanel({ chart, selectedPalace, selectedSiHua, palaceNonce }: InsightPanelProps) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeTopic, setActiveTopic] = useState<string>('overview');
-  const messagesRef = useRef<Message[]>([]); // always-current copy for closures
+  // 每个上下文（话题 / 宫位 / 四化）各自保存一份对话；切换只换显示，不调接口
+  const [threads, setThreads] = useState<Record<string, Message[]>>({});
+  const [activeKey, setActiveKey] = useState<string>('topic:overview');
+  const threadsRef = useRef<Record<string, Message[]>>({}); // always-current copy for closures
   const loadingRef = useRef(false);
-  const autoLoaded = useRef(false);
-  const lastPalaceBranch = useRef<number | undefined>(undefined);
-  const lastSiHuaKey = useRef<string | undefined>(undefined);
+  const abortRef = useRef<AbortController | null>(null);
+  const genRef = useRef(0); // 生成序号：旧流的 finally 不得误关新流
+  const genKeyRef = useRef<string>('topic:overview'); // 正在生成的上下文
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Keep refs in sync
-  useEffect(() => { messagesRef.current = messages; }, [messages]);
+  useEffect(() => { threadsRef.current = threads; }, [threads]);
   useEffect(() => { loadingRef.current = loading; }, [loading]);
+
+  // 当前上下文的消息列表
+  const messages = threads[activeKey] ?? [];
 
   // Auto-scroll
   useEffect(() => {
@@ -205,28 +211,32 @@ export default function InsightPanel({ chart, selectedPalace, selectedSiHua }: I
     }
   }, [messages]);
 
-  // Auto-generate 命格总览 on mount
-  useEffect(() => {
-    if (autoLoaded.current) return;
-    autoLoaded.current = true;
-    sendMessage(TOPIC_PROMPTS.overview, true);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Inject palace analysis when palace selected
+  // 宫格点击：只切换解读区上下文，不调接口；已有文字直接显示，没有就显示生成按钮
   useEffect(() => {
-    if (!selectedPalace || selectedPalace.branch === lastPalaceBranch.current) return;
-    lastPalaceBranch.current = selectedPalace.branch;
+    if (!selectedPalace) return;
+    setActiveKey(`palace:${selectedPalace.branch}`);
+    setActiveTopic('');
+  }, [selectedPalace, palaceNonce]);
 
-    const majorStars = selectedPalace.stars.filter(s => s.type === 'major');
+  // 四化点击：只切换解读区上下文，不调接口
+  useEffect(() => {
+    if (!selectedSiHua) return;
+    setActiveKey(`sihua:${selectedSiHua.starName}-${selectedSiHua.siHua}-${selectedSiHua.view}`);
+    setActiveTopic('');
+  }, [selectedSiHua]);
+
+  // 按上下文 key 生成对应的解读 prompt（与此前自动注入的 prompt 文本完全一致）
+  const buildPalacePrompt = (palace: Palace): string => {
+    const majorStars = palace.stars.filter(s => s.type === 'major');
     const starDesc = majorStars.length > 0
       ? majorStars.map(s => `${s.name}${s.siHua ? '化' + s.siHua : ''}`).join('、')
       : '空宫（借对宫）';
-    const role = PALACE_ROLES[selectedPalace.name] ?? '';
-
-    const prompt = `请重点分析【${selectedPalace.name}】（主管：${role}），该宫主星为${starDesc}，按以下结构输出：
+    const role = PALACE_ROLES[palace.name] ?? '';
+    return `请重点分析【${palace.name}】（主管：${role}），该宫主星为${starDesc}，按以下结构输出：
 
 **【宫位定性】**
-${selectedPalace.name}在命盘中的意义，以及这种星曜配置的整体判断。
+${palace.name}在命盘中的意义，以及这种星曜配置的整体判断。
 
 **【主星解读】**
 主星在此宫的倪海厦体系解读，引用具体观点。
@@ -236,52 +246,102 @@ ${selectedPalace.name}在命盘中的意义，以及这种星曜配置的整体�
 
 **【实际建议】**
 基于此宫的具体建议。`;
+  };
 
-    sendMessage(prompt, true);
-  }, [selectedPalace]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // 注入四化飞化分析
-  useEffect(() => {
-    if (!selectedSiHua) return;
-    const key = `${selectedSiHua.starName}-${selectedSiHua.siHua}-${selectedSiHua.view}`;
-    if (key === lastSiHuaKey.current) return;
-    lastSiHuaKey.current = key;
-
-    // 找出该星所在宫位
+  const buildSiHuaPrompt = (starName: string, siHua: string, view: TimeView): string => {
     const palaceOfStar = chart.palaces.find(p =>
-      p.stars.some(s => s.name === selectedSiHua.starName)
+      p.stars.some(s => s.name === starName)
     );
     const palaceName = palaceOfStar?.name ?? '未知宫位';
-    const viewLabel = selectedSiHua.view === 'daxian' ? '大限' : '流年';
+    const viewLabel = view === 'daxian' ? '大限' : '流年';
+    return `请分析【${viewLabel}${starName}化${siHua}】的飞化影响，按以下结构输出：
 
-    const prompt = `请分析【${viewLabel}${selectedSiHua.starName}化${selectedSiHua.siHua}】的飞化影响，按以下结构输出：
-
-**【化${selectedSiHua.siHua}基本含义】**
-化${selectedSiHua.siHua}在倪海厦体系中的核心含义，以及${selectedSiHua.starName}化${selectedSiHua.siHua}的特殊含义。
+**【化${siHua}基本含义】**
+化${siHua}在倪海厦体系中的核心含义，以及${starName}化${siHua}的特殊含义。
 
 **【落宫影响】**
-${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，该宫主管的领域受到何种影响，倪师如何解读。
+${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何种影响，倪师如何解读。
 
 **【三方四正飞化路径】**
-化${selectedSiHua.siHua}入${palaceName}后，对其三方四正（对宫、两个三合宫）的联动影响。
+化${siHua}入${palaceName}后，对其三方四正（对宫、两个三合宫）的联动影响。
 
 **【当前运势影响】**
-在${viewLabel}时间维度下，此化${selectedSiHua.siHua}对命主近期运势的具体影响。
+在${viewLabel}时间维度下，此化${siHua}对命主近期运势的具体影响。
 
 **【实际建议】**
 基于此四化的具体可操作建议。`;
+  };
 
-    sendMessage(prompt, true);
-  }, [selectedSiHua]); // eslint-disable-line react-hooks/exhaustive-deps
+  // 当前上下文的生成 prompt；null 表示该上下文不可生成
+  const buildCtxPrompt = (key: string): string | null => {
+    if (key.startsWith('topic:')) {
+      return TOPIC_PROMPTS[key.slice(6)] ?? null;
+    }
+    if (key.startsWith('palace:')) {
+      const palace = chart.palaces.find(p => p.branch === Number(key.slice(7)));
+      return palace ? buildPalacePrompt(palace) : null;
+    }
+    if (key.startsWith('sihua:')) {
+      const parts = key.slice(6).split('-');
+      if (parts.length !== 3) return null;
+      return buildSiHuaPrompt(parts[0], parts[1], parts[2] as TimeView);
+    }
+    return null;
+  };
 
-  const streamResponse = async (apiMessages: { role: 'user' | 'assistant'; content: string }[]) => {
+  // 当前上下文的本地信息（全部取自已算出的命盘，不调接口）
+  const ctxLocal = (() => {
+    if (activeKey.startsWith('palace:')) {
+      const palace = chart.palaces.find(p => p.branch === Number(activeKey.slice(7)));
+      if (!palace) return null;
+      const majorStars = palace.stars.filter(s => s.type === 'major');
+      const starDesc = majorStars.length > 0
+        ? majorStars.map(s => `${s.name}${s.siHua ? '化' + s.siHua : ''}`).join('、')
+        : '空宫（借对宫）';
+      return {
+        title: palace.name,
+        sub: PALACE_ROLES[palace.name] ?? PALACE_ROLES[`${palace.name}宫`] ?? '',
+        lines: [`主星：${starDesc}`],
+        hint: `点下方按钮生成【${palace.name}】解读`,
+      };
+    }
+    if (activeKey.startsWith('sihua:')) {
+      const parts = activeKey.slice(6).split('-');
+      if (parts.length !== 3) return null;
+      const [starName, siHua, view] = parts;
+      const palaceOfStar = chart.palaces.find(p => p.stars.some(s => s.name === starName));
+      const viewLabel = view === 'daxian' ? '大限' : '流年';
+      return {
+        title: `${viewLabel}${starName}化${siHua}`,
+        sub: `落宫：${palaceOfStar?.name ?? '未知宫位'}`,
+        lines: [] as string[],
+        hint: `点下方按钮生成【${viewLabel}${starName}化${siHua}】解读`,
+      };
+    }
+    const topic = TOPICS.find(t => `topic:${t.key}` === activeKey);
+    return {
+      title: null as string | null,
+      sub: '',
+      lines: [] as string[],
+      hint: `点下方按钮生成「${topic?.label ?? '命格'}」解读，也可以直接点上方话题或在下方追问`,
+    };
+  })();
+
+  const streamResponse = async (apiMessages: { role: 'user' | 'assistant'; content: string }[], signal?: AbortSignal, key?: string) => {
+    const gen = genRef.current;
+    const targetKey = key ?? genKeyRef.current;
     try {
       const res = await fetch('/api/interpret', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chart, messages: apiMessages }),
+        signal,
       });
       if (res.status === 404) throw new Error('api-missing');
+      if (res.status === 429) {
+        const data = await res.json().catch(() => null);
+        throw new Error((data as { error?: string } | null)?.error ?? '今日解读次数已用完，明天再来');
+      }
       if (!res.ok) throw new Error('请求失败');
       if (!res.body) throw new Error('无响应流');
 
@@ -289,7 +349,7 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
       const decoder = new TextDecoder();
       let assistantText = '';
 
-      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      setThreads(prev => ({ ...prev, [targetKey]: [...(prev[targetKey] ?? []), { role: 'assistant', content: '' }] }));
 
       while (true) {
         const { done, value } = await reader.read();
@@ -302,52 +362,90 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
           try {
             const delta = JSON.parse(data).delta?.text ?? '';
             assistantText += delta;
-            setMessages(prev => {
-              const updated = [...prev];
+            setThreads(prev => {
+              const updated = [...(prev[targetKey] ?? [])];
               updated[updated.length - 1] = { role: 'assistant', content: assistantText };
-              return updated;
+              return { ...prev, [targetKey]: updated };
             });
           } catch { /* skip */ }
         }
       }
     } catch (e) {
-      const missing = e instanceof Error && e.message === 'api-missing';
-      setMessages(prev => [...prev, { role: 'assistant', content: missing ? '开源版不含 AI 解读接口（/api/interpret），需要你自己实现后才能用，详见 README「快速开始」。排盘本身不需要任何 API Key。' : '解读失败，请稍后重试。' }]);
+      // 被新话题/追问打断：静默结束，不追加错误提示
+      if (signal?.aborted || (e instanceof DOMException && e.name === 'AbortError')) {
+        /* 打断 */
+      } else {
+        const missing = e instanceof Error && e.message === 'api-missing';
+        const limitedMsg = e instanceof Error && e.message.includes('今日解读次数已用完') ? e.message : null;
+        setThreads(prev => ({ ...prev, [targetKey]: [...(prev[targetKey] ?? []), { role: 'assistant', content: missing ? '开源版不含 AI 解读接口（/api/interpret），需要你自己实现后才能用，详见 README「快速开始」。排盘本身不需要任何 API Key。' : limitedMsg ?? '解读失败，请稍后重试。' }] }));
+      }
     } finally {
-      setLoading(false);
-      loadingRef.current = false;
+      // 只有最新一次生成才放开 loading，避免旧流的 finally 误关新流
+      if (genRef.current === gen) {
+        setLoading(false);
+        loadingRef.current = false;
+      }
     }
   };
 
-  const sendMessage = (text: string, hidden = false) => {
-    if (!text.trim() || loadingRef.current) return;
+  const sendMessage = (text: string, hidden = false, key: string = activeKey) => {
+    if (!text.trim()) return;
+    // 生成中点新话题/追问：打断上一条流（只改 UI 层，不动接口与解读逻辑）
+    if (loadingRef.current) {
+      abortRef.current?.abort();
+      genRef.current += 1;
+      const prevKey = genKeyRef.current;
+      setThreads(prev => {
+        const list = prev[prevKey] ?? [];
+        const last = list[list.length - 1];
+        if (last && last.role === 'assistant' && !last.content) {
+          return { ...prev, [prevKey]: list.slice(0, -1) };
+        }
+        return prev;
+      });
+      loadingRef.current = false;
+      setLoading(false);
+    }
+    genRef.current += 1;
+    genKeyRef.current = key;
+    const controller = new AbortController();
+    abortRef.current = controller;
     loadingRef.current = true;
     setLoading(true);
 
     const userMsg: Message = { role: 'user', content: text, hidden };
     // Capture current messages synchronously via ref (avoids stale closure)
-    const apiMessages = [...messagesRef.current, userMsg].map(m => ({
+    const apiMessages = [...(threadsRef.current[key] ?? []), userMsg].map(m => ({
       role: m.role,
       content: m.content,
     }));
 
-    setMessages(prev => [...prev, userMsg]);
+    setThreads(prev => ({ ...prev, [key]: [...(prev[key] ?? []), userMsg] }));
     setInput('');
-    streamResponse(apiMessages);
+    streamResponse(apiMessages, controller.signal, key);
   };
 
+  // 切换话题只换显示：已有文字直接显示，没有就显示生成按钮，不调接口
   const handleTopicClick = (topicKey: string) => {
     if (loadingRef.current) return;
     setActiveTopic(topicKey);
-    sendMessage(TOPIC_PROMPTS[topicKey], true);
+    setActiveKey(`topic:${topicKey}`);
+  };
+
+  // “生成解读”：只对当前上下文调一次接口
+  const handleGenerate = () => {
+    if (loadingRef.current) return;
+    const prompt = buildCtxPrompt(activeKey);
+    if (!prompt) return;
+    sendMessage(prompt, true, activeKey);
   };
 
   const handleSend = () => {
-    sendMessage(input);
+    sendMessage(input, false, activeKey);
   };
 
   return (
-    <div className="flex flex-col h-full rounded-xl overflow-hidden card-glass">
+    <div className="flex flex-col insight-panel rounded-xl overflow-hidden card-glass">
 
       {/* ── Topic buttons ── */}
       <div className="flex-shrink-0 px-2 pt-2.5 pb-2" style={{ borderBottom: '1px solid var(--t-border)' }}>
@@ -358,11 +456,10 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
               <button
                 key={t.key}
                 onClick={() => handleTopicClick(t.key)}
-                disabled={loading}
-                className="py-1.5 text-[10px] font-medium rounded-lg transition-all duration-150 disabled:opacity-40"
+                className="py-1.5 text-[12px] font-medium rounded-lg transition-all duration-150"
                 style={{
-                  background: isActive ? 'rgba(212,168,67,0.12)' : 'transparent',
-                  border: `1px solid ${isActive ? 'rgba(212,168,67,0.3)' : 'var(--t-border)'}`,
+                  background: isActive ? 'color-mix(in srgb, var(--ac) 12%, transparent)' : 'transparent',
+                  border: `1px solid ${isActive ? 'color-mix(in srgb, var(--ac) 30%, transparent)' : 'var(--t-border)'}`,
                   color: isActive ? 'var(--t-gold)' : 'var(--t-faint)',
                 }}
               >
@@ -371,16 +468,50 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
             );
           })}
         </div>
+        {loading && (
+          <div className="mt-1.5 text-[11px] text-center" style={{ color: 'var(--t-faint)' }}>
+            ✦ 生成中…
+          </div>
+        )}
       </div>
 
       {/* ── Messages ── */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
+      <div ref={scrollRef} className="insight-scroll flex-1 overflow-y-auto p-4 space-y-4 min-h-0">
 
         {/* Loading state before first message */}
-        {messages.length === 0 && (
+        {messages.length === 0 && !loading && (
+          <div className="flex flex-col items-center justify-center h-full text-center gap-3 px-6">
+            <div className="text-4xl" style={{ color: 'var(--t-gold)', opacity: 0.15 }}>✦</div>
+            {ctxLocal?.title && (
+              <div>
+                <div className="text-[15px] font-medium" style={{ color: 'var(--t-gold)' }}>{ctxLocal.title}</div>
+                {ctxLocal.sub && (
+                  <div className="text-[12px] mt-1" style={{ color: 'var(--t-faint)' }}>{ctxLocal.sub}</div>
+                )}
+                {ctxLocal.lines.map((l, i) => (
+                  <div key={i} className="text-[13px] mt-1" style={{ color: 'var(--t-text2)' }}>{l}</div>
+                ))}
+              </div>
+            )}
+            <p className="text-[13px] leading-relaxed" style={{ color: 'var(--t-faint)' }}>{ctxLocal?.hint ?? '点下方按钮生成解读'}</p>
+            <button
+              type="button"
+              onClick={handleGenerate}
+              className="px-5 py-2.5 rounded-xl text-[14px] font-medium transition-all"
+              style={{
+                background: 'color-mix(in srgb, var(--ac) 15%, transparent)',
+                border: '1px solid color-mix(in srgb, var(--ac) 35%, transparent)',
+                color: 'var(--t-gold)',
+              }}
+            >
+              ✦ 生成解读
+            </button>
+          </div>
+        )}
+        {messages.length === 0 && loading && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.1 }}>✦</div>
-            <p className="text-[10px] animate-pulse" style={{ color: 'var(--t-faint)' }}>命格解读生成中…</p>
+            <p className="text-[12px] animate-pulse" style={{ color: 'var(--t-faint)' }}>命格解读生成中…</p>
           </div>
         )}
 
@@ -397,10 +528,10 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
                   className="flex justify-end"
                 >
                   <div
-                    className="max-w-[85%] rounded-xl px-3 py-2 text-[11px]"
+                    className="max-w-[85%] rounded-xl px-3 py-2 text-[13px]"
                     style={{
-                      background: 'rgba(212,168,67,0.08)',
-                      border: '1px solid rgba(212,168,67,0.18)',
+                      background: 'color-mix(in srgb, var(--ac) 8%, transparent)',
+                      border: '1px solid color-mix(in srgb, var(--ac) 18%, transparent)',
                       color: 'var(--t-gold)',
                     }}
                   >
@@ -419,7 +550,7 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div
-                  className="text-[9px] tracking-widest mb-2 flex items-center gap-1.5"
+                  className="text-[11px] tracking-widest mb-2 flex items-center gap-1.5"
                   style={{ color: 'var(--t-faint)' }}
                 >
                   <span style={{ color: 'var(--t-gold)', opacity: 0.4 }}>✦</span>
@@ -441,8 +572,8 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="继续追问，如：今年适合换工作吗？"
-            disabled={loading}
-            className="flex-1 rounded-lg px-3 py-2 text-[11px] focus:outline-none transition-colors"
+
+            className="flex-1 rounded-lg px-3 py-2 text-[13px] focus:outline-none transition-colors"
             style={{
               background: 'var(--t-card)',
               border: '1px solid var(--t-border)',
@@ -451,11 +582,11 @@ ${selectedSiHua.starName}化${selectedSiHua.siHua}落在【${palaceName}】，�
           />
           <button
             onClick={handleSend}
-            disabled={loading || !input.trim()}
-            className="px-3 py-2 rounded-lg text-[11px] font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            disabled={!input.trim()}
+            className="px-3 py-2 rounded-lg text-[13px] font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
-              background: 'rgba(212,168,67,0.15)',
-              border: '1px solid rgba(212,168,67,0.25)',
+              background: 'color-mix(in srgb, var(--ac) 15%, transparent)',
+              border: '1px solid color-mix(in srgb, var(--ac) 25%, transparent)',
               color: 'var(--t-gold)',
             }}
           >

@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('ziwei-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('ziwei-skin');if(s==='zijin'||s==='cyber'||s==='jade'||s==='paper'){document.documentElement.setAttribute('data-skin',s);document.documentElement.setAttribute('data-theme',s==='paper'?'light':'dark');}else{document.documentElement.setAttribute('data-skin','zijin');document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
       </head>
       <body className="min-h-screen">
         <ThemeProvider>
