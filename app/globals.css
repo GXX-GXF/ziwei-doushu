@@ -341,7 +341,7 @@ body {
 .sihua-badge {
   display: inline-flex;
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
   font-family: var(--font-mono);
   padding: 1px 5px;
   border-radius: var(--r-xs);
@@ -375,7 +375,7 @@ body {
 
 /* 标签 */
 .label-section {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--tx-3);
@@ -684,7 +684,7 @@ body {
 .flight-label {
   position: absolute; transform: translate(-50%, -50%); z-index: 30;
   pointer-events: none; white-space: nowrap;
-  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+  font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
   border: 1px solid; background: var(--t-bg);
   box-shadow: 0 0 16px -2px currentColor;
   animation: flight-label-in 0.3s ease both;

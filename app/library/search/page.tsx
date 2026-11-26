@@ -55,7 +55,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
             {q ? (
               <>
                 <div style={{ fontSize: '14px', marginBottom: '6px' }}>暂未在已收录古籍中找到这个关键词</div>
-                <div style={{ fontSize: '11px', color: 'var(--tx-3)', lineHeight: 1.7 }}>
+                <div style={{ fontSize: '12px', color: 'var(--tx-3)', lineHeight: 1.7 }}>
                   我们持续补充内容中。可尝试搜索：<br />
                   <span style={{ color: 'var(--ac)' }}>七杀朝斗 / 双禄朝垣 / 化忌 / 紫微 / 命宫 / 机月同梁</span>
                 </div>
@@ -88,7 +88,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    fontSize: '11px',
+                    fontSize: '12px',
                     color: 'var(--tx-3)',
                     marginBottom: '8px',
                     letterSpacing: '0.1em',

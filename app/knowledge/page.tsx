@@ -36,7 +36,7 @@ export default function KnowledgeHomePage() {
       <div className="text-center px-6 py-14">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to right, transparent, rgba(184,146,42,0.4))' }} />
-          <span style={{ fontSize: '11px', color: 'var(--ac)', letterSpacing: '0.4em' }}>KNOWLEDGE BASE</span>
+          <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.4em' }}>KNOWLEDGE BASE</span>
           <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to left, transparent, rgba(184,146,42,0.4))' }} />
         </div>
         <h1 style={{ fontSize: 'clamp(28px, 4vw, 42px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.15em', marginBottom: '12px' }}>
@@ -50,7 +50,7 @@ export default function KnowledgeHomePage() {
 
       {/* 14 主星卡片 */}
       <div className="max-w-5xl mx-auto px-6 pb-20">
-        <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '24px' }}>
+        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '24px' }}>
           十四主星
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
@@ -90,7 +90,7 @@ export default function KnowledgeHomePage() {
                 <span style={{ fontSize: '20px', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.1em' }}>
                   {star}星
                 </span>
-                <span style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em' }}>
+                <span style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.15em' }}>
                   ZI WEI · 14 STARS
                 </span>
               </div>
@@ -106,7 +106,7 @@ export default function KnowledgeHomePage() {
                       key={t}
                       href={`/knowledge/${STAR_TO_SLUG[star]}/${t}`}
                       style={{
-                        fontSize: '11px',
+                        fontSize: '12px',
                         padding: '4px 10px',
                         background: 'rgba(184,146,42,0.06)',
                         border: '1px solid rgba(184,146,42,0.15)',

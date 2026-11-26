@@ -101,7 +101,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               )}
             </div>
 
-            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-2)', letterSpacing: '0.05em' }}>
+            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '12px', color: 'var(--tx-2)', letterSpacing: '0.05em' }}>
               ↑ 朋友圈 / 微信 / 抖音 / 小红书 都能用
             </div>
 
@@ -132,7 +132,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               </button>
 
               <div style={{
-                fontSize: '11px', color: 'var(--tx-2)', lineHeight: 1.7,
+                fontSize: '12px', color: 'var(--tx-2)', lineHeight: 1.7,
                 padding: '10px 12px', background: 'rgba(157,107,255,0.08)',
                 borderRadius: '8px', marginTop: '4px',
               }}>

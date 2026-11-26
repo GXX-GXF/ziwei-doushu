@@ -159,7 +159,7 @@ export default function HemingPage() {
   };
 
   const labelStyle = {
-    fontSize: '10px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7,
+    fontSize: '12px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7,
     marginBottom: '16px', display: 'block',
   };
 
@@ -185,7 +185,7 @@ export default function HemingPage() {
         <div style={{ width: '1px', height: '20px', background: 'var(--t-border)' }} />
         <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em' }}>合盘分析</span>
         <div style={{ flex: 1 }} />
-        <span style={{ fontSize: '11px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
+        <span style={{ fontSize: '12px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
       </header>
 
       {/* 主体 */}
@@ -238,7 +238,7 @@ export default function HemingPage() {
           {/* 区块标题 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: (analysis || analyzing) ? '20px' : '24px' }}>
             <span style={{ color: 'var(--ac)', opacity: 0.6 }}>◉</span>
-            <span style={{ fontSize: '11px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>合盘分析 · HEMING</span>
+            <span style={{ fontSize: '12px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>合盘分析 · HEMING</span>
           </div>
 
           {/* 状态分支 */}
@@ -295,7 +295,7 @@ export default function HemingPage() {
         {/* ═══ 针对合盘的追问聊天框（仅分析完成后显示）═══════════ */}
         {analysis && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-            <div style={{ fontSize: '11px', letterSpacing: '0.2em', textIndent: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '12px', letterSpacing: '0.2em', textIndent: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
               针对此次合盘继续追问
             </div>
 

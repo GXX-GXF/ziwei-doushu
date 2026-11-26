@@ -469,7 +469,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
           })}
         </div>
         {loading && (
-          <div className="mt-1.5 text-[11px] text-center" style={{ color: 'var(--t-faint)' }}>
+          <div className="mt-1.5 text-[12px] text-center" style={{ color: 'var(--t-faint)' }}>
             ✦ 生成中…
           </div>
         )}
@@ -550,7 +550,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div
-                  className="text-[11px] tracking-widest mb-2 flex items-center gap-1.5"
+                  className="text-[12px] tracking-widest mb-2 flex items-center gap-1.5"
                   style={{ color: 'var(--t-faint)' }}
                 >
                   <span style={{ color: 'var(--t-gold)', opacity: 0.4 }}>✦</span>

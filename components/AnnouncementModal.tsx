@@ -84,7 +84,7 @@ export default function AnnouncementModal() {
               flexShrink: 0,
               position: 'relative',
             }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7, marginBottom: '6px' }}>
+              <div style={{ fontSize: '12px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7, marginBottom: '6px' }}>
                 A LETTER TO USERS
               </div>
               <h2 style={{ fontSize: '19px', fontWeight: 700, color: 'var(--ac)', letterSpacing: '0.08em', margin: 0 }}>
@@ -116,7 +116,7 @@ export default function AnnouncementModal() {
               flexShrink: 0,
               textAlign: 'center',
             }}>
-              <div style={{ fontSize: '10px', letterSpacing: '0.3em', color: 'var(--ac)', marginBottom: '4px', fontWeight: 600 }}>
+              <div style={{ fontSize: '12px', letterSpacing: '0.3em', color: 'var(--ac)', marginBottom: '4px', fontWeight: 600 }}>
                 LIMITED TIME · 限时回馈
               </div>
               <div style={{ fontSize: '14px', color: '#efe9dc', fontWeight: 600, lineHeight: 1.6 }}>
