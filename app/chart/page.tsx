@@ -58,7 +58,7 @@ const backBtnStyle: CSSProperties = {
   color: 'var(--t-gold)',
   textDecoration: 'none',
   display: 'inline-block',
-  fontSize: 14,
+  fontSize: 15,
   lineHeight: 1.5,
 };
 
@@ -75,8 +75,8 @@ export default function ChartPage() {
         <div style={{ marginBottom: 16 }}>
           <Link href="/" style={backBtnStyle}>← 返回首页</Link>
         </div>
-        <h1 className="zj-gold-title" style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>紫微斗数排盘</h1>
-        <p style={{ color: 'var(--tx-2)', marginBottom: 24, fontSize: 14, lineHeight: 1.7 }}>
+        <h1 className="zj-gold-title" style={{ fontSize: 30, fontWeight: 700, marginBottom: 8 }}>紫微斗数排盘</h1>
+        <p style={{ color: 'var(--tx-2)', marginBottom: 24, fontSize: 15, lineHeight: 1.7 }}>
           输入出生年月日时，开源排盘引擎即时生成命盘。
         </p>
         <div className="zj-divider-gold" style={{ marginBottom: 28 }} />

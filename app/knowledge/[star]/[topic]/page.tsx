@@ -105,20 +105,20 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
       {/* 顶栏 */}
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
+        <Link href="/" style={{ fontSize: '13px', color: 'var(--ac)', letterSpacing: '0.3em', textDecoration: 'none' }}>
           ← 首页
         </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.2em' }}>
+        <div style={{ fontSize: '13px', color: 'var(--tx-3)', letterSpacing: '0.2em' }}>
           倪师方法论 · 知识库
         </div>
-        <Link href="/chart" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em', textDecoration: 'none' }}>
+        <Link href="/chart" style={{ fontSize: '13px', color: 'var(--ac)', letterSpacing: '0.2em', textDecoration: 'none' }}>
           起盘 →
         </Link>
       </div>
 
       <article className="max-w-3xl mx-auto px-6 py-12">
         {/* 面包屑 */}
-        <nav style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '16px' }}>
+        <nav style={{ fontSize: '13px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '16px' }}>
           <Link href="/" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>首页</Link>
           <span style={{ margin: '0 8px' }}>/</span>
           <Link href="/knowledge" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>知识库</Link>
@@ -130,14 +130,14 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
 
         {/* 标题区 */}
         <header style={{ marginBottom: '36px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.25em', marginBottom: '8px' }}>
+          <div style={{ fontSize: '13px', color: 'var(--tx-3)', letterSpacing: '0.25em', marginBottom: '8px' }}>
             {data.topicLabel} · 倪海厦体系详解
           </div>
           <h1 style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.1em', lineHeight: 1.2 }}>
             {star}入{data.palaceName}宫
           </h1>
           {STAR_BRIEF_SEO[star] && (
-            <p style={{ fontSize: '13px', color: 'var(--tx-2)', marginTop: '14px', lineHeight: 1.8 }}>
+            <p style={{ fontSize: '14px', color: 'var(--tx-2)', marginTop: '14px', lineHeight: 1.8 }}>
               {STAR_BRIEF_SEO[star]}
             </p>
           )}
@@ -146,7 +146,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         {/* 内容 4 段 */}
         {data.parsed.dingdiao && (
           <Section title="一句话定调" gradient>
-            <p style={{ fontSize: '17px', color: 'var(--tx-0)', lineHeight: 1.9, fontWeight: 500, letterSpacing: '0.04em' }}>
+            <p style={{ fontSize: '19px', color: 'var(--tx-0)', lineHeight: 1.9, fontWeight: 500, letterSpacing: '0.04em' }}>
               {data.parsed.dingdiao}
             </p>
           </Section>
@@ -154,7 +154,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
 
         {data.parsed.lundian && (
           <Section title="核心论断">
-            <div style={{ fontSize: '15px', color: 'var(--tx-0)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
+            <div style={{ fontSize: '16px', color: 'var(--tx-0)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
               {data.parsed.lundian}
             </div>
           </Section>
@@ -162,7 +162,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
 
         {data.parsed.yiju && (
           <Section title="命盘依据">
-            <div style={{ fontSize: '14px', color: 'var(--tx-0)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
+            <div style={{ fontSize: '15px', color: 'var(--tx-0)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
               {data.parsed.yiju}
             </div>
           </Section>
@@ -170,7 +170,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
 
         {data.parsed.chuchu && (
           <Section title="经典出处" minimal>
-            <div style={{ fontSize: '13px', color: 'var(--tx-2)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
+            <div style={{ fontSize: '14px', color: 'var(--tx-2)', lineHeight: 2, letterSpacing: '0.02em', whiteSpace: 'pre-wrap' }}>
               {data.parsed.chuchu}
             </div>
           </Section>
@@ -185,10 +185,10 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
           border: '1px solid rgba(184,146,42,0.3)',
           textAlign: 'center',
         }}>
-          <div style={{ fontSize: '14px', color: 'var(--tx-0)', fontWeight: 600, letterSpacing: '0.1em', marginBottom: '6px' }}>
+          <div style={{ fontSize: '15px', color: 'var(--tx-0)', fontWeight: 600, letterSpacing: '0.1em', marginBottom: '6px' }}>
             想看你自己命盘的{data.topicLabel}？
           </div>
-          <div style={{ fontSize: '12px', color: 'var(--tx-2)', marginBottom: '16px' }}>
+          <div style={{ fontSize: '13px', color: 'var(--tx-2)', marginBottom: '16px' }}>
             输入生辰起盘 · 倪师正宗解读 · AI 答疑伴学
           </div>
           <Link href="/chart" style={{
@@ -197,7 +197,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
             color: 'white',
             borderRadius: '999px',
-            fontSize: '14px',
+            fontSize: '15px',
             fontWeight: 600,
             letterSpacing: '0.15em',
             textDecoration: 'none',
@@ -217,7 +217,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
                   key={t}
                   href={`/knowledge/${slug}/${t}`}
                   style={{
-                    fontSize: '12px',
+                    fontSize: '13px',
                     padding: '6px 12px',
                     background: 'var(--bg-card)',
                     border: '1px solid rgba(184,146,42,0.25)',
@@ -241,7 +241,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
                 key={s}
                 href={`/knowledge/${STAR_TO_SLUG[s]}/${topic}`}
                 style={{
-                  fontSize: '12px',
+                  fontSize: '13px',
                   padding: '6px 12px',
                   background: 'var(--bg-card)',
                   border: '1px solid rgba(184,146,42,0.25)',
@@ -265,17 +265,17 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
           borderRadius: '10px',
           textAlign: 'center',
         }}>
-          <div style={{ fontSize: '12px', color: 'var(--ac-dim)', letterSpacing: '0.15em', marginBottom: '6px' }}>
+          <div style={{ fontSize: '13px', color: 'var(--ac-dim)', letterSpacing: '0.15em', marginBottom: '6px' }}>
             想读原典？
           </div>
-          <Link href="/library" style={{ fontSize: '13px', color: 'var(--ac)', fontWeight: 500, letterSpacing: '0.1em', textDecoration: 'none' }}>
+          <Link href="/library" style={{ fontSize: '14px', color: 'var(--ac)', fontWeight: 500, letterSpacing: '0.1em', textDecoration: 'none' }}>
             📜 查阅古籍原典库 — 紫微斗数全集 / 全书 / 骨髓赋 →
           </Link>
         </div>
       </article>
 
       {/* 页脚 */}
-      <footer style={{ borderTop: '1px solid rgba(184,146,42,0.15)', padding: '20px 24px', textAlign: 'center', fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em' }}>
+      <footer style={{ borderTop: '1px solid rgba(184,146,42,0.15)', padding: '20px 24px', textAlign: 'center', fontSize: '13px', color: 'var(--tx-3)', letterSpacing: '0.1em' }}>
         <div style={{ marginBottom: '6px' }}>紫微研究 · 基于倪海厦正宗体系 · 仅供学习参考</div>
         <div style={{ opacity: 0.85 }}>本平台不构成任何医疗、投资、法律或重大决策建议</div>
       </footer>
@@ -290,7 +290,7 @@ function Section({ title, children, gradient, minimal }: { title: string; childr
         display: 'inline-flex',
         alignItems: 'center',
         gap: '8px',
-        fontSize: '13px',
+        fontSize: '14px',
         color: 'var(--ac)',
         fontWeight: 600,
         letterSpacing: '0.2em',

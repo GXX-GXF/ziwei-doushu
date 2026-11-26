@@ -17,7 +17,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (sectionMatch) {
           return (
             <div key={i} style={{ paddingTop: i === 0 ? 0 : '14px', paddingBottom: '4px' }}>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--ac)', letterSpacing: '0.04em' }}>
+              <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ac)', letterSpacing: '0.04em' }}>
                 【{sectionMatch[1]}】
               </span>
             </div>
@@ -26,7 +26,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (line.trim() === '') return <div key={i} style={{ height: '4px' }} />;
         const parts = line.split(/\*\*(.+?)\*\*/);
         return (
-          <div key={i} style={{ fontSize: '13px', lineHeight: 1.75, color: 'var(--tx-2)' }}>
+          <div key={i} style={{ fontSize: '14px', lineHeight: 1.75, color: 'var(--tx-2)' }}>
             {parts.map((part, j) =>
               j % 2 === 0
                 ? part
@@ -159,7 +159,7 @@ export default function HemingPage() {
   };
 
   const labelStyle = {
-    fontSize: '12px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7,
+    fontSize: '13px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7,
     marginBottom: '16px', display: 'block',
   };
 
@@ -177,15 +177,15 @@ export default function HemingPage() {
           style={{
             display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 14px',
             border: '1px solid var(--t-border-acc)', borderRadius: 12, background: 'var(--t-card)',
-            color: 'var(--t-gold)', fontSize: '14px', cursor: 'pointer',
+            color: 'var(--t-gold)', fontSize: '15px', cursor: 'pointer',
           }}
         >
           ← 返回首页
         </button>
         <div style={{ width: '1px', height: '20px', background: 'var(--t-border)' }} />
-        <span style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.2em' }}>合盘分析</span>
+        <span style={{ fontSize: '13px', color: 'var(--ac)', letterSpacing: '0.2em' }}>合盘分析</span>
         <div style={{ flex: 1 }} />
-        <span style={{ fontSize: '12px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
+        <span style={{ fontSize: '13px', color: 'var(--tx-3)' }}>感情 · 合伙 · 亲子 · 朋友</span>
       </header>
 
       {/* 主体 */}
@@ -193,11 +193,11 @@ export default function HemingPage() {
 
         {/* 标题 */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-          <div style={{ fontSize: '28px', color: 'var(--ac)', opacity: 0.15, marginBottom: '12px' }}>☯</div>
-          <h1 style={{ fontSize: '22px', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--tx-0)', marginBottom: '8px' }}>
+          <div style={{ fontSize: '30px', color: 'var(--ac)', opacity: 0.15, marginBottom: '12px' }}>☯</div>
+          <h1 style={{ fontSize: '24px', fontWeight: 600, letterSpacing: '0.15em', color: 'var(--tx-0)', marginBottom: '8px' }}>
             紫微合盘
           </h1>
-          <p style={{ fontSize: '13px', color: 'var(--tx-3)', lineHeight: 1.6 }}>
+          <p style={{ fontSize: '14px', color: 'var(--tx-3)', lineHeight: 1.6 }}>
             输入两个人的出生信息，AI 基于倪海厦体系分析双方命盘的缘分匹配度、感情走向与相处建议
           </p>
         </div>
@@ -238,13 +238,13 @@ export default function HemingPage() {
           {/* 区块标题 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: (analysis || analyzing) ? '20px' : '24px' }}>
             <span style={{ color: 'var(--ac)', opacity: 0.6 }}>◉</span>
-            <span style={{ fontSize: '12px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>合盘分析 · HEMING</span>
+            <span style={{ fontSize: '13px', letterSpacing: '0.3em', color: 'var(--tx-3)' }}>合盘分析 · HEMING</span>
           </div>
 
           {/* 状态分支 */}
           {!analysis && !analyzing && (
             <div style={{ textAlign: 'center', padding: '32px 0' }}>
-              <div style={{ fontSize: '13px', color: 'var(--tx-3)', marginBottom: '24px', lineHeight: 1.7 }}>
+              <div style={{ fontSize: '14px', color: 'var(--tx-3)', marginBottom: '24px', lineHeight: 1.7 }}>
                 填好双方出生信息后，点击下方按钮<br />
                 AI 将基于倪海厦体系深度分析两人缘分匹配度
               </div>
@@ -253,7 +253,7 @@ export default function HemingPage() {
                 className="btn-accent"
                 style={{
                   padding: '14px 40px', borderRadius: 'var(--r-pill)',
-                  fontSize: '14px', fontWeight: 600,
+                  fontSize: '15px', fontWeight: 600,
                   letterSpacing: '0.15em', cursor: 'pointer',
                   transition: 'transform 0.15s',
                 }}
@@ -263,7 +263,7 @@ export default function HemingPage() {
                 开始合盘分析
               </button>
               {formError && (
-                <div style={{ marginTop: '20px', fontSize: '13px', color: 'var(--ji)' }}>
+                <div style={{ marginTop: '20px', fontSize: '14px', color: 'var(--ji)' }}>
                   {formError}
                 </div>
               )}
@@ -271,7 +271,7 @@ export default function HemingPage() {
           )}
 
           {analyzing && !analysis && (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '40px 0', color: 'var(--tx-3)', fontSize: '13px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '40px 0', color: 'var(--tx-3)', fontSize: '14px' }}>
               <div style={{
                 width: '14px', height: '14px',
                 border: '2px solid var(--t-border)', borderTopColor: 'var(--ac)',
@@ -284,7 +284,7 @@ export default function HemingPage() {
           {analysis && <AiContent text={analysis} streaming={analyzing} />}
 
           {analysisError && (
-            <div style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--t-border)', background: 'var(--t-card)', fontSize: '13px', color: 'var(--tx-2)', marginTop: '12px' }}>
+            <div style={{ padding: '12px 16px', borderRadius: '10px', border: '1px solid var(--t-border)', background: 'var(--t-card)', fontSize: '14px', color: 'var(--tx-2)', marginTop: '12px' }}>
               {apiMissing
                 ? '开源版不含合盘 AI 分析接口（/api/heming），需要你自己实现后才能用。两人的命盘可以分别到「排盘」页（/chart）查看。'
                 : rateLimited ? '今日解读次数已用完，明天再来' : '分析暂时不可用，请重试。'}
@@ -295,7 +295,7 @@ export default function HemingPage() {
         {/* ═══ 针对合盘的追问聊天框（仅分析完成后显示）═══════════ */}
         {analysis && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px' }}>
-            <div style={{ fontSize: '12px', letterSpacing: '0.2em', textIndent: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
+            <div style={{ fontSize: '13px', letterSpacing: '0.2em', textIndent: '0.2em', color: 'var(--tx-3)', marginBottom: '4px' }}>
               针对此次合盘继续追问
             </div>
 
@@ -313,7 +313,7 @@ export default function HemingPage() {
                   onClick={() => { setQuestion(q); runAnalysis(q); }}
                   disabled={analyzing}
                   style={{
-                    fontSize: '12px', padding: '6px 14px',
+                    fontSize: '13px', padding: '6px 14px',
                     borderRadius: 'var(--r-pill)',
                     border: '1px solid var(--t-border)',
                     background: 'transparent', color: 'var(--tx-2)',
@@ -339,7 +339,7 @@ export default function HemingPage() {
                 placeholder="继续追问，如：哪几年是两人感情关键期？"
                 disabled={analyzing}
                 className="input-base"
-                style={{ fontSize: '13px', flex: 1 }}
+                style={{ fontSize: '14px', flex: 1 }}
               />
               <button
                 onClick={() => runAnalysis(question || undefined)}
@@ -350,7 +350,7 @@ export default function HemingPage() {
                   border: analyzing ? '1px solid var(--t-border)' : 'none',
                   background: analyzing ? 'var(--t-card)' : undefined,
                   color: analyzing ? 'var(--t-faint)' : undefined,
-                  fontSize: '13px', fontWeight: 500,
+                  fontSize: '14px', fontWeight: 500,
                   cursor: analyzing ? 'not-allowed' : 'pointer',
                   transition: 'all 0.15s', whiteSpace: 'nowrap',
                 }}

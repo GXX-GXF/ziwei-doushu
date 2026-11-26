@@ -155,7 +155,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (sectionMatch) {
           return (
             <div key={i} className="pt-3 pb-0.5 first:pt-0">
-              <span className="text-[13px] font-semibold tracking-wide" style={{ color: 'var(--t-gold)' }}>
+              <span className="text-[14px] font-semibold tracking-wide" style={{ color: 'var(--t-gold)' }}>
                 【{sectionMatch[1]}】
               </span>
             </div>
@@ -164,7 +164,7 @@ function AiContent({ text, streaming }: { text: string; streaming?: boolean }) {
         if (line.trim() === '') return <div key={i} className="h-1" />;
         const parts = line.split(/\*\*(.+?)\*\*/);
         return (
-          <div key={i} className="text-[13px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>
+          <div key={i} className="text-[14px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>
             {parts.map((part, j) =>
               j % 2 === 0
                 ? part
@@ -456,7 +456,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
               <button
                 key={t.key}
                 onClick={() => handleTopicClick(t.key)}
-                className="py-1.5 text-[12px] font-medium rounded-lg transition-all duration-150"
+                className="py-1.5 text-[13px] font-medium rounded-lg transition-all duration-150"
                 style={{
                   background: isActive ? 'color-mix(in srgb, var(--ac) 12%, transparent)' : 'transparent',
                   border: `1px solid ${isActive ? 'color-mix(in srgb, var(--ac) 30%, transparent)' : 'var(--t-border)'}`,
@@ -469,7 +469,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
           })}
         </div>
         {loading && (
-          <div className="mt-1.5 text-[12px] text-center" style={{ color: 'var(--t-faint)' }}>
+          <div className="mt-1.5 text-[13px] text-center" style={{ color: 'var(--t-faint)' }}>
             ✦ 生成中…
           </div>
         )}
@@ -484,20 +484,20 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
             <div className="text-4xl" style={{ color: 'var(--t-gold)', opacity: 0.15 }}>✦</div>
             {ctxLocal?.title && (
               <div>
-                <div className="text-[15px] font-medium" style={{ color: 'var(--t-gold)' }}>{ctxLocal.title}</div>
+                <div className="text-[16px] font-medium" style={{ color: 'var(--t-gold)' }}>{ctxLocal.title}</div>
                 {ctxLocal.sub && (
-                  <div className="text-[12px] mt-1" style={{ color: 'var(--t-faint)' }}>{ctxLocal.sub}</div>
+                  <div className="text-[13px] mt-1" style={{ color: 'var(--t-faint)' }}>{ctxLocal.sub}</div>
                 )}
                 {ctxLocal.lines.map((l, i) => (
-                  <div key={i} className="text-[13px] mt-1" style={{ color: 'var(--t-text2)' }}>{l}</div>
+                  <div key={i} className="text-[14px] mt-1" style={{ color: 'var(--t-text2)' }}>{l}</div>
                 ))}
               </div>
             )}
-            <p className="text-[13px] leading-relaxed" style={{ color: 'var(--t-faint)' }}>{ctxLocal?.hint ?? '点下方按钮生成解读'}</p>
+            <p className="text-[14px] leading-relaxed" style={{ color: 'var(--t-faint)' }}>{ctxLocal?.hint ?? '点下方按钮生成解读'}</p>
             <button
               type="button"
               onClick={handleGenerate}
-              className="px-5 py-2.5 rounded-xl text-[14px] font-medium transition-all"
+              className="px-5 py-2.5 rounded-xl text-[15px] font-medium transition-all"
               style={{
                 background: 'color-mix(in srgb, var(--ac) 15%, transparent)',
                 border: '1px solid color-mix(in srgb, var(--ac) 35%, transparent)',
@@ -511,7 +511,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
         {messages.length === 0 && loading && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.1 }}>✦</div>
-            <p className="text-[12px] animate-pulse" style={{ color: 'var(--t-faint)' }}>命格解读生成中…</p>
+            <p className="text-[13px] animate-pulse" style={{ color: 'var(--t-faint)' }}>命格解读生成中…</p>
           </div>
         )}
 
@@ -528,7 +528,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
                   className="flex justify-end"
                 >
                   <div
-                    className="max-w-[85%] rounded-xl px-3 py-2 text-[13px]"
+                    className="max-w-[85%] rounded-xl px-3 py-2 text-[14px]"
                     style={{
                       background: 'color-mix(in srgb, var(--ac) 8%, transparent)',
                       border: '1px solid color-mix(in srgb, var(--ac) 18%, transparent)',
@@ -550,7 +550,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
                 animate={{ opacity: 1, y: 0 }}
               >
                 <div
-                  className="text-[12px] tracking-widest mb-2 flex items-center gap-1.5"
+                  className="text-[13px] tracking-widest mb-2 flex items-center gap-1.5"
                   style={{ color: 'var(--t-faint)' }}
                 >
                   <span style={{ color: 'var(--t-gold)', opacity: 0.4 }}>✦</span>
@@ -573,7 +573,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
             onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="继续追问，如：今年适合换工作吗？"
 
-            className="flex-1 rounded-lg px-3 py-2 text-[13px] focus:outline-none transition-colors"
+            className="flex-1 rounded-lg px-3 py-2 text-[14px] focus:outline-none transition-colors"
             style={{
               background: 'var(--t-card)',
               border: '1px solid var(--t-border)',
@@ -583,7 +583,7 @@ ${starName}化${siHua}落在【${palaceName}】，该宫主管的领域受到何
           <button
             onClick={handleSend}
             disabled={!input.trim()}
-            className="px-3 py-2 rounded-lg text-[13px] font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-3 py-2 rounded-lg text-[14px] font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
               background: 'color-mix(in srgb, var(--ac) 15%, transparent)',
               border: '1px solid color-mix(in srgb, var(--ac) 25%, transparent)',

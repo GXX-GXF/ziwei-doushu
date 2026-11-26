@@ -84,10 +84,10 @@ export default function AnnouncementModal() {
               flexShrink: 0,
               position: 'relative',
             }}>
-              <div style={{ fontSize: '12px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7, marginBottom: '6px' }}>
+              <div style={{ fontSize: '13px', letterSpacing: '0.4em', color: 'var(--ac)', opacity: 0.7, marginBottom: '6px' }}>
                 A LETTER TO USERS
               </div>
-              <h2 style={{ fontSize: '19px', fontWeight: 700, color: 'var(--ac)', letterSpacing: '0.08em', margin: 0 }}>
+              <h2 style={{ fontSize: '21px', fontWeight: 700, color: 'var(--ac)', letterSpacing: '0.08em', margin: 0 }}>
                 致正在使用这个平台的你
               </h2>
               <button
@@ -99,7 +99,7 @@ export default function AnnouncementModal() {
                   background: 'color-mix(in srgb, var(--ac) 10%, transparent)',
                   border: '1px solid color-mix(in srgb, var(--ac) 30%, transparent)',
                   borderRadius: '50%',
-                  color: 'var(--ac)', fontSize: '14px',
+                  color: 'var(--ac)', fontSize: '15px',
                   cursor: 'pointer', lineHeight: 1,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
@@ -116,11 +116,11 @@ export default function AnnouncementModal() {
               flexShrink: 0,
               textAlign: 'center',
             }}>
-              <div style={{ fontSize: '12px', letterSpacing: '0.3em', color: 'var(--ac)', marginBottom: '4px', fontWeight: 600 }}>
+              <div style={{ fontSize: '13px', letterSpacing: '0.3em', color: 'var(--ac)', marginBottom: '4px', fontWeight: 600 }}>
                 LIMITED TIME · 限时回馈
               </div>
-              <div style={{ fontSize: '14px', color: '#efe9dc', fontWeight: 600, lineHeight: 1.6 }}>
-                <span style={{ fontSize: '16px', color: 'var(--ac)', fontWeight: 700 }}>5 月 1 日 — 5 月 8 日</span>
+              <div style={{ fontSize: '15px', color: '#efe9dc', fontWeight: 600, lineHeight: 1.6 }}>
+                <span style={{ fontSize: '17px', color: 'var(--ac)', fontWeight: 700 }}>5 月 1 日 — 5 月 8 日</span>
                 <br />
                 平台全部功能 + AI 提问 全部免费开放
               </div>
@@ -130,7 +130,7 @@ export default function AnnouncementModal() {
             <div style={{
               padding: '18px 28px 24px',
               overflowY: 'auto',
-              fontSize: '14px',
+              fontSize: '15px',
               lineHeight: 1.85,
               color: '#efe9dc',
               flex: 1,
@@ -167,7 +167,7 @@ export default function AnnouncementModal() {
               <p style={{ margin: '0 0 16px', color: 'var(--ac)', fontWeight: 500 }}>
                 最后，真心祝愿大家都能越来越了解自己，越来越爱自己，也越来越有能力爱身边的人。
               </p>
-              <p style={{ margin: 0, textAlign: 'right', fontSize: '13px', color: 'color-mix(in srgb, var(--ac) 80%, transparent)' }}>
+              <p style={{ margin: 0, textAlign: 'right', fontSize: '14px', color: 'color-mix(in srgb, var(--ac) 80%, transparent)' }}>
                 ——谢谢大家 🙏
               </p>
             </div>
@@ -190,7 +190,7 @@ export default function AnnouncementModal() {
                   color: '#1a0f00',
                   border: 'none',
                   borderRadius: '10px',
-                  fontSize: '13px',
+                  fontSize: '14px',
                   letterSpacing: '0.1em',
                   fontWeight: 500,
                   cursor: 'pointer',
