@@ -728,6 +728,7 @@ body {
 .home-spacer { flex: 1; }
 .home-actions { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
 .home-btn {
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
   min-width: 172px; min-height: 56px; padding: 14px 34px; border-radius: 999px;
   font-family: "Noto Serif SC", "Songti SC", serif; font-weight: 900; font-size: 19px; letter-spacing: .3em; text-indent: .3em;
   border: 1px solid var(--t-border); color: var(--tx-0); background: var(--t-card);

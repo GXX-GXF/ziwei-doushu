@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import StarField from '@/components/StarField';
 import { useSkin, type Skin } from '@/components/ThemeProvider';
 
@@ -19,7 +19,6 @@ const SKINS: Array<{ id: Skin; label: string; dot: string }> = [
 ];
 
 export default function HomePage() {
-  const router = useRouter();
   const { skin, setSkin, mounted } = useSkin();
 
   return (
@@ -53,12 +52,12 @@ export default function HomePage() {
         <div className="home-spacer" />
 
         <div className="home-actions">
-          <button type="button" className="home-btn primary" onClick={() => router.push('/chart')}>
+          <Link href="/chart" className="home-btn primary">
             单人起盘
-          </button>
-          <button type="button" className="home-btn" onClick={() => router.push('/heming')}>
+          </Link>
+          <Link href="/heming" className="home-btn">
             双人合盘
-          </button>
+          </Link>
         </div>
       </main>
     </div>
